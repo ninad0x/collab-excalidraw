@@ -1,22 +1,17 @@
 import express from "express"
-import z from "zod"
 import jwt from "jsonwebtoken"
-import { JWT_SECRET } from "./config"
+import { JWT_SECRET } from "@repo/backend-common/config"
 import { userMiddleware } from "./middleware"
+import { CreateRoomSchema, CreateUserSchema } from "@repo/common/types"
+
 
 const app = express()
 app.use(express.json())
 
 
-const signupSchema = z.object({
-    username: z.string().min(3, { message: "Username must contain atleast 3 characters"}).max(20),
-    password: z.string().min(6, { message: "Password must contain atleast 6 characters"}).max(20),
-})
-
-
 app.post("/signup", (req, res) => {
 
-    const { success, data, error } = signupSchema.safeParse(req.body)
+    const { success, data, error } = CreateUserSchema.safeParse(req.body)
 
     if (!success) {
         return res.json({
@@ -33,7 +28,7 @@ app.post("/signup", (req, res) => {
 
 app.post("/signin", (req, res) => {
 
-    const { success, data, error } = signupSchema.safeParse(req.body)
+    const { success, data, error } = CreateUserSchema.safeParse(req.body)
 
     if (!success) {
         return res.json({
@@ -56,7 +51,7 @@ app.post("/signin", (req, res) => {
 
 app.post("/room", userMiddleware, (req, res) => {
 
-    const { success, data, error } = signupSchema.safeParse(req.body)
+    const { success, data, error } = CreateRoomSchema.safeParse(req.body)
 
     if (!success) {
         return res.json({
