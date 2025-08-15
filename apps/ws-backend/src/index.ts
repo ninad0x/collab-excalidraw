@@ -11,11 +11,6 @@ interface User {
     rooms: Number[]
 }
 
-interface wsData {
-    type: string,
-    room: string
-}
-
 const users: User[] = []
 
 function checkUser(token: string): string | null {
